@@ -1,0 +1,22 @@
+<% layout('/layouts/boilerplate.ejs') %>  
+<body>
+    <div class="cardsContainer">
+        <% if(listings.length > 0){%>
+            <% for(let listing of listings.slice(0)) { %>
+                <a href = "listings/<%=listing.id%>" class="card">
+                    <img src="<%=listing.image.url%>" class="card-img-top" alt="<%=listing.image.filename%>">
+                    <div class="card-body">
+                        <p class="card-text"><%=listing.title%><br>
+                        <i>&#8377;<%=listing.price.toLocaleString("en-in")%></i>/night</p>
+                    </div>
+                    <div class="card-img-overlay"></div>  
+                </a> 
+            <% } %>
+        <% } else { %> 
+            <div style="margin-top: 12px ;opacity: 0.6; display: flex; flex-direction: column; align-items: center;"class="no-results">
+                <img style="width: 108px;" src="/assets/icons8-search.svg" alt="">
+                <h3>No Results</h3>
+            </div>
+        <% } %> 
+    </div>
+</body>

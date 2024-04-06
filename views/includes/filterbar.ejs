@@ -1,0 +1,12 @@
+
+<div class="secondbar">
+    <div class=" filters-and-btns">
+        <button class="navbar-filter-btns" id="navbar-filter-left-btn"><i class="fa-regular fa-circle-left"></i></button>
+        <div class="filters" id="navbar-filterbar" >
+            <% for(let filter of filters){ %>
+                <div class="filter <%if(filter.active){%>active<%}%>"><i class="fa-solid <%=filter.icon%>"></i><span><%=filter.name%></span></div>
+            <% } %>
+        </div>
+        <button class="navbar-filter-btns" id="navbar-filter-right-btn"><i class="fa-regular fa-circle-right"></i></button>
+    </div>
+</div>

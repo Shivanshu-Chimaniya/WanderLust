@@ -1,0 +1,65 @@
+<% layout('/layouts/boilerplate') -%>
+<body>
+    <div class="mt-5">
+        <h3>Add new listing</h3>
+        <form class="mt-3 row needs-validation" novalidate method="post" action="/listings" enctype="multipart/form-data">
+            <div class="mb-3 col-12 col-md-9">
+                <label class="form-label">Select Your Tags</label>
+                <fieldset style="display: flex; flex-wrap: wrap;" class="form-check form-check-inline" >
+                    <% for(let i=0; i<filters.length; i++){ %>
+                        <div class="m-1" style="padding:0.25rem 1rem 0.25rem 2.5rem; border: 1px solid #e2e2e2;" >
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox<%=i%>" name="filters[]" value="<%=filters[i].name%>">
+                            <label class="form-check-label" for="inlineCheckbox<%=i%>"><%=filters[i].name%></label>
+                        </div>
+                    <% } %>
+                </fieldset>
+            </div>
+            <div class="mb-3 col-12 col-md-9">
+                <label class="form-label" for="title">Tilte</label>
+                <input class="form-control" id="title" type="text" name="listing[title]" placeholder="title" required/>
+                <div class="invalid-feedback">
+                    Invalid Title.
+                </div>
+            </div>
+            <div class="mb-3 col-12 col-md-9">
+                <label class="form-label" for="description">Description</label>
+                <input id="description" type="text" class="form-control" name="listing[description]" placeholder="description" required/>
+                <div class="invalid-feedback">
+                    Invalid Description.
+                </div>
+            </div>
+            <div class="mb-3 col-12 col-md-5">
+                <label class="form-label" for="image">Image</label>
+                <input id="image" type="file" class="form-control" name="listingImage"/>
+
+                <div class="invalid-feedback">
+                    Invalid Image.
+                </div>
+            </div>
+            
+            <div class="mb-3 col-12 col-md-4">
+                <label class="form-label" for="price">Pricing</label>
+                <input id="price" type="number" class="form-control" name="listing[price]" placeholder="price" required/>
+                <div class="invalid-feedback">
+                    Invalid Price.
+                </div>
+            </div>
+            <div class="mb-3 col-12 col-md-5">
+                <label class="form-label" for="location">Location</label>
+                <input id="location" type="text" class="form-control" name="listing[location]" placeholder="location" required/>
+                <div class="invalid-feedback">
+                    Invalid Location.
+                </div>
+            </div>
+            <div class="mb-3 col-12 col-md-4">
+                <label class="form-label" for="country">Country</label>
+                <input id="country" type="text" class="form-control" name="listing[country]" placeholder="country" required/>
+                <div class="invalid-feedback">
+                    Invalid Country.
+                </div>
+            </div>
+            <div class="col-12"></div>
+            <button class="col-12 col-md-1 my-3 btn btn-red">Submit</button>
+        </form>
+    </div>
+</body>

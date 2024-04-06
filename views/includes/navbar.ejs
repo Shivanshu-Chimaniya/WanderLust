@@ -1,0 +1,41 @@
+<div class="navbar-container">
+  <nav class="navbar navbar-expand-md">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i><b> WanderLust</b></a>
+      </div>
+      <form class="navbar-search-form" role="search">
+        <div class="input-group">
+          <input type="text" class="form-control navbar-search" placeholder="search" aria-label="search" aria-describedby="search-button">
+          <button class="btn btn-outline-secondary navbar-search-btn" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass" style="color: white;;"></i></button>
+        </div>
+      </form>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/listings/add">Airbnb your home</a>
+          </li>
+        </ul>
+      </div>
+      <div class="btn-group dropstart">
+        <button type="button" class="navbar-user-button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-user navbar-user-icon"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <% if(user != "NotAUser") { %>
+            <li><a class="dropdown-item" href="/logout">Log out</a></li>
+          <% } else { %>
+            <li><a class="dropdown-item" href="/login">Log in</a>
+            <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+          <%} %>
+          <hr>
+          <li><a class="dropdown-item" href="/listings/add">Airbnb your home</a></li>
+          <li><a class="dropdown-item" href="/login">Help Center</a>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <% if(loadFilters == true) { %>
+    <%- include("../includes/filterbar.ejs") %>  
+  <% } %>
+</div>
