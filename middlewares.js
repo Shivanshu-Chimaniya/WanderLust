@@ -23,7 +23,6 @@ module.exports.isOwner = async (req, res, next) => {
 			next();
 		} else {
 			req.flash("error", "Permission Denied!");
-			console.log(req.session, res.originalUrl);
 			res.redirect(`/listings/${id}`);
 		}
 	} else {
@@ -39,7 +38,6 @@ module.exports.isReviewOwner = async (req, res, next) => {
 			next();
 		} else {
 			req.flash("error", "Permission Denied!");
-			console.log(req.session, res.originalUrl);
 			res.redirect(`/listings/${id}`);
 		}
 	} else {
@@ -76,7 +74,6 @@ module.exports.validateListing = (req, res, next) => {
 };
 
 module.exports.fixFilters = (req, res, next) => {
-	console.log(req);
 	for (let filter of filters) {
 		delete filter.active;
 	}

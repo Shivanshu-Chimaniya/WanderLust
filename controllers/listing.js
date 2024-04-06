@@ -10,7 +10,6 @@ module.exports.index = wrapAsync(async (req, res) => {
 	if (req.query.filter) {
 		let filter = req.query.filter;
 		allListings = await Listing.find({filters: filter});
-		console.log(allListings);
 	} else {
 		allListings = await Listing.find({});
 	}
@@ -25,7 +24,6 @@ module.exports.renderAddForm = (req, res) => {
 	res.render("listings/add.ejs", {filters});
 };
 module.exports.saveNewListing = wrapAsync(async (req, res) => {
-	console.log(req.body);
 	let newListing = new Listing(req.body.listing);
 	newListing.filters = req.body.filters;
 	newListing.reviews = [];
@@ -60,7 +58,6 @@ module.exports.showListing = wrapAsync(async (req, res) => {
 				$pull: {reviews: reviewId},
 			});
 			req.flash("error", "check console");
-			console.log(reviewId, " deleted from list");
 		}
 	}
 	res.render("listings/show.ejs", {listing: reqListing, reviews});
@@ -70,9 +67,6 @@ module.exports.renderEditForm = wrapAsync(async (req, res) => {
 	let listing = await Listing.findById(req.params.id);
 	let originalImageUrl = listing.image.url;
 	originalImageUrl.replace("/upload", "/upload/w_150");
-	for (let filter of filters) {
-		console.log(filter, listing.filters.includes(filter.name));
-	}
 
 	if (listing) {
 		res.render("listings/edit.ejs", {listing, originalImageUrl, filters});
@@ -84,7 +78,6 @@ module.exports.renderEditForm = wrapAsync(async (req, res) => {
 
 module.exports.editListing = wrapAsync(async (req, res) => {
 	let id = req.params.id;
-	console.log(req.body.listing);
 	let result = await Listing.findByIdAndUpdate(id, req.body.listing);
 	if (req.file) {
 		let listing = await Listing.findById(id);

@@ -47,7 +47,7 @@ const store = MongoStore.create({
 	touchAfter: 24 * 60 * 60,
 });
 const sessionOptions = {
-	secret: process.env.SELECT,
+	secret: `${process.env.SELECT}`,
 	resave: false,
 	saveUninitialized: true,
 	cookie: {
@@ -65,7 +65,7 @@ store.on("error", (err) => {
 
 app.use(session(sessionOptions));
 app.use(flash());
-app.use(cookieParser("aSuperSecretStringThatOnlyIKnow22"));
+app.use(cookieParser(process.env.SECRET));
 
 app.use(passport.initialize());
 app.use(passport.session());

@@ -22,7 +22,7 @@
           <i class="fa-solid fa-user navbar-user-icon"></i>
         </button>
         <ul class="dropdown-menu">
-          <% if(user != "NotAUser") { %>
+          <% if(user && user != "NotAUser") { %>
             <li><a class="dropdown-item" href="/logout">Log out</a></li>
           <% } else { %>
             <li><a class="dropdown-item" href="/login">Log in</a>
