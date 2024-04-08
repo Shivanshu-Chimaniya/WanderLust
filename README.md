@@ -39,7 +39,7 @@ This project is built with a robust stack of technologies that ensure a scalable
 Each technology has been carefully selected to contribute to the overall functionality and performance of the Airbnb clone, making it a comprehensive full-stack project.
 
 ## Setup and Installation
-- **Clone**: run `git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY`.
+- **Clone**: run `git clone https://github.com/Shivanshu-Chimaniya/WanderLust`.
 - **Install Dependecies**: run `npm install`.
 - **Start server**: run `Node index.js`.
 - **Open**: go to `localhost:8080/listings` on any web browser.
