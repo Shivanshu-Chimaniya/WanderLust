@@ -47,3 +47,5 @@ Each technology has been carefully selected to contribute to the overall functio
 ## Acknowledgments
 I want to thank **Shraddha Khapra** for her amazing guidance during this project. Her teachings were crucial in shaping every step I took. I followed her methods closely, which greatly influenced the final result.
 
+## Hosted on : `https://wanderlust-8w82.onrender.com/listings`
+
