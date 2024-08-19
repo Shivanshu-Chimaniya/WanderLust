@@ -14,4 +14,10 @@ module.exports = [
 	{"name": "A frame", "icon": "fa-solid fa-a"},
 	{"name": "Arctic", "icon": "fa-solid fa-snowflake"},
 	{"name": "Trending", "icon": "fa-solid fa-fire"},
+	{"name": "Garden", "icon": "fa-solid fa-clover"},
+	{"name": "Cabin", "icon": "fa-solid fa-warehouse"},
+	{"name": "Mordern", "icon": "fa-solid fa-hotel"},
+	{"name": "Apartment", "icon": "fa-solid fa-building"},
+	{"name": "Nature", "icon": "fa-solid fa-seedling"},
+	{"name": "Couple", "icon": "fa-solid fa-children"},
 ];

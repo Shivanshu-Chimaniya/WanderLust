@@ -3,21 +3,23 @@ const {
 	isLoggedIn,
 	isOwner,
 	validateListing,
-	fixFilters,
-} = require("../middlewares.js");
+	isntOwner,
+} = require("../utils/middlewares.js");
 const listingController = require("../controllers/listing.js");
 const multer = require("multer");
-const {storage} = require("../cloudConfig.js");
+const {storage} = require("../utils/cloudConfig.js");
+const {listing} = require("../utils/schemaConfigs.js");
 const upload = multer({storage});
 
 const router = express.Router();
 
 router
 	.route("/")
-	.get(fixFilters, listingController.index)
+	.get(listingController.index)
 	.post(
 		isLoggedIn,
-		upload.single("listingImage"),
+		upload.array("images"),
+		validateListing,
 		listingController.saveNewListing
 	);
 
@@ -29,7 +31,7 @@ router
 	.put(
 		isLoggedIn,
 		isOwner,
-		upload.single("listingImage"),
+		upload.array("images"),
 		validateListing,
 		listingController.editListing
 	)
@@ -38,5 +40,23 @@ router
 router
 	.route("/:id/edit")
 	.get(isLoggedIn, isOwner, listingController.renderEditForm);
+
+router.route("/:id/save").put(isLoggedIn, listingController.save);
+
+router.route("/:id/unsave").put(isLoggedIn, listingController.unsave);
+
+router.route("/:id/issaved").get(isLoggedIn, listingController.isSaved);
+
+router.route("/:id/map").get(listingController.showMap);
+
+router
+	.route("/:id/book")
+	.get(isLoggedIn, isntOwner, listingController.bookListing)
+	.post(isLoggedIn, isntOwner, listingController.confirmBooking);
+
+router.route("/:id/allBookings").get(listingController.showAllBookings);
+router
+	.route("/:id/canBook")
+	.get(isLoggedIn, isntOwner, listingController.checkDates);
 
 module.exports = router;

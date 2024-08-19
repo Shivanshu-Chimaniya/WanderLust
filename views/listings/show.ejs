@@ -1,80 +1,364 @@
-<% layout('/layouts/boilerplate')-%>
-<body>
-    <div class="row">
-        <a class="btn btn-dark ms-4 mb-1" style="height: 2.5rem; width: 2.5rem; align-self:flex-end;" href="/listings"><i class="fa-solid fa-arrow-left"></i></a>
-        <h3 class="mt-4 col-11"><b><%=listing.title%></b></h3>
-        <img  style="border-radius: 30px; max-height: 50vh; object-fit: cover;" class="col-12 col-sm-10 col-md-6 mt-2" src="<%=listing.image.url%>" alt="image of place">
-        <p class="col-12"> owner : <%=listing.owner.username%></p>
-        <% if(listing.filters.length > 0){%>
-            <p class="col-12 mt-3">Tags : <% for(let filter of listing.filters){ %><span class="badge rounded-pill text-bg-primary mx-1" style="background-color: #ff385c !important;"><%=filter%></span><% } %></p>
-        <%} %>
-        <p class="col-12"><%=listing.description%></p>
-        <p class="col"><b>&#8377;<%=listing.price.toLocaleString("en-in")%></b>/night</p>
-        <p class="col-12"><%=listing.location%>, <%=listing.country%></p>
+<% layout('/layouts/generalLayout')-%>
+<% if(listing) { %>
+    <script>
+        let listingId = "<%= listing.id %>";
+        let isSignedIn = true;;
+        if(`<%- JSON.stringify(user) %>` == '') {
+            isSignedIn = false;
+        }
+    </script>
+<% }%>
+<div  class="mt-1 col-12 px-3 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2">
+    <div class="col-12 d-block d-sm-flex  justify-content-between">
+        <h3 class="mt-2"><b><%=listing.title%></b></h3>
+        <div class="d-none d-lg-flex">
+            <a class="btn btn-text" style="align-self:center ;" href="/listings"><i class="fa-solid fa-angles-left"></i> Go back</a>
+            <a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>/map"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+            <button id="saveButton" onClick="saveListing()" class="nav-link  btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
+            <button style="display: none;" id="unsaveButton" onClick=" unsaveListing()" class="nav-link btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
+            <button class="btn btn-text"><i class="fa-regular fa-share-from-square"></i> Share</button> 
+        </div>
+        <div class="d-block d-lg-none dropdown-center mt-2 me-4">
+            <button class="ms-auto btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              options
+            </button>
+            <ul class="dropdown-menu">
+            
+            <li><a class="dropdown-item btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>/map"><i class="fa-solid fa-map-location-dot"></i> Map</a></li>
+            <li>
+                <button id="saveButton" onClick="saveListing()" class="dropdown-item btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
+                <button style="display: none;" id="unsaveButton" onClick=" unsaveListing()" class="dropdown-item btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
+            </li>
+            <li><button class="dropdown-item btn btn-text"><i class="fa-regular fa-share-from-square"></i> Share</button></li>
+            <li><a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>"><i class="fa-solid fa-angles-left"></i> Go back</a></li>
+            </ul>
+          </div>
     </div>
-    <% if (listing.owner.id == user.id) {%>
-    <div class="mb-5" style="display: flex;">
-        <a class="btn btn-red me-3" style="display: flex;" href="<%=listing.id%>/edit">Edit</a> 
-        <form method="POST" action="/listings/<%=listing.id%>?_method=DELETE">
-            <button class="btn btn-dark">DELETE</button> 
-        </form>
-    </div>
-    <% }%>
     
+    <!-- images -->
+    <div class="mt-3 col-12 d-none d-md-block">
+        <% if (listing.images.length > 0) { %> 
+            <% if (listing.images.length == 1) { %>
+                <style>
+                    .images-container {
+                        width: 100%;
+                        height: 450px;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                        border-radius: 20px;
+                    }
     
-    <% if (user != "NotAUser") {%>
-    <div class="mb-5" >
-        <hr>
-        <h2>Create a review</h2>
-        <form class="mt-3 row" method="post" action="/listings/<%=listing.id%>/review">
-            <div class="mb-3 col-8 col-md-4">
-                <label class="form-label" for="rating">Rating</label>
-                <fieldset class="starability-basic">
-                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                    <input type="radio" id="first-rate1" name="review[rating]" value="1" checked/>
-                    <label for="first-rate1" title="Terrible">1 star</label>
-                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                    <label for="first-rate2" title="Not good">2 stars</label>
-                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                    <label for="first-rate3" title="Average">3 stars</label>
-                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                    <label for="first-rate4" title="Very good">4 stars</label>
-                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                    <label for="first-rate5" title="Amazing">5 stars</label>
-                </fieldset>
-            </div>
-
-            <div class="col-12"></div>
-            <div class="mb-3 col-12 col-md-8">
-                <label for="comment" class="form-label">Share your experience</label>
-                <textarea class="form-control" id="comment" rows="3" name="review[comment]" placeholder="here.."></textarea>
-            </div>
-            <div class="col-12"></div>
-            <button class="col-2 col-md-1 btn btn-red">POST</button> 
-        </form>
-    </div>
-    <% }%>
-
-    <% if(reviews.length > 0) { %>
-    <div class = "row mb-5">
-        <hr>
-        <h2><u>All Reviews</u></h2>
-        <% for(let review of reviews) { %>
-            <div class="card col-10 col-md-4 m-2 px-3 py-2">
-                <div style="display: flex;flex-wrap: wrap ;align-items: baseline;" class="mt-2">
-                    <h4 style="flex-grow:2;"><b>@<%=review.owner.username%></b></h4>
-                    <p style="flex-grow:0;; margin-right: 0.85rem;" class="mt-1"><% for(let i=0; i<review.rating; i++) { %>
-                        <i class="fa-solid fa-star" style="color: #f5bd23; font-size: 1.5rem;"></i>
-                    <% } %></p>
+                    .images-container img {
+                        width: 100%;
+                    }
+                </style>
+                <div class="images-container">
+                    <img src="<%=listing.images[0].url%>" alt="Image 1">
                 </div>
-                <p><%= review.comment %></p>
-                <% if (review.owner.id == user.id) {%>
-                <form method="post" action="/listings/<%=listing.id%>/review/<%=review.id%>?_method=DELETE">
-                    <button class="btn btn-dark">delete</button>
+            <% } else if (listing.images.length == 2) {%> 
+                <style>
+                    .images-container {
+                        display: flex;
+                        width: 100%;
+                        height: 450px;
+                        justify-content: space-between;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                        gap:10px;
+                    }
+    
+                    .images-two {
+                        width: calc(50% - 10px);
+                        height: 100%;
+                        border-radius: 20px;
+                    }
+                </style>
+                <div class="images-container">
+                    <img class="images-two" src="<%=listing.images[0].url%>" alt="Image 1">
+                    <img class="images-two" src="<%=listing.images[1].url%>" alt="Image 2">
+                </div>
+            <% } else if (listing.images.length == 3) {%> 
+                <style>
+                    img{
+                        border-radius: 20px;
+                    }
+                    .images-container {
+                        display: flex;
+                        width: 100%;
+                        height: 450px;
+                        gap: 10px;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                    }
+            
+                    .left-image {
+                        width: calc(40% - 10px);
+                        height: 100%;
+                    }
+            
+                    .right-images {
+                        display: flex;
+                        flex-direction: column;
+                        width: calc(60% - 10px);
+                        gap: 10px;
+                    }
+            
+                    .right-images img {
+                        width: 100%;
+                        height: calc(50% - 5px);
+                    }
+                </style>
+                <div class="images-container">
+                    <img src="<%=listing.images[0].url%>" alt="Left Image" class="left-image">
+                    <div class="right-images">
+                        <img src="<%=listing.images[1].url%>" alt="Top Right Image">
+                        <img src="<%=listing.images[2].url%>" alt="Bottom Right Image">
+                    </div>
+                </div>
+            <% } else if (listing.images.length == 4) {%> 
+                <style>
+                    .images-container {
+                        display: flex;
+                        height: 550px;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        box-sizing: border-box;
+                    }
+            
+                    .images-container img {
+                        width: calc(50% - 10px);
+                        height: calc(50% - 10px); 
+                        border-radius: 20px;
+                    }
+                </style>
+                <div class="images-container">
+                    <img src="<%=listing.images[0].url%>" alt="Image 1">
+                    <img src="<%=listing.images[1].url%>" alt="Image 2">
+                    <img src="<%=listing.images[2].url%>" alt="Image 3">
+                    <img src="<%=listing.images[3].url%>" alt="Image 4">
+                </div>
+            <% } else if (listing.images.length == 5) {%>  
+                <style>
+                    .container {
+                        display: flex;
+                        width: 100%;
+                        height: 600px;
+                        gap: 10px;
+                        box-sizing: border-box;
+                        padding: 10px;
+                    }
+                    .left {
+                        display: flex;
+                        flex-direction: column;
+                        width: calc(40% - 10px); 
+                        gap: 10px;
+                    }
+                    .right {
+                        display: flex;
+                        gap: 10px;
+                        flex-direction: column;
+                        width: calc(60% - 10px); 
+                    }
+                    
+                    .left img {
+                        height: calc(50% - 10px); 
+                    }
+                    .top-right-img {
+                        height: calc(40% - 10px);
+                    }
+                    .bottom-right { 
+                        display: flex;
+                        height: calc(60% - 10px);
+                        gap: 10px;
+                    }
+                    .bottom-right img {
+                        width: calc(50% - 5px); 
+                        height: 100%;
+                    }
+                    img{
+                        border-radius: 20px;
+                    }
+                </style>    
+                <div class="container">
+                    <div class="left">
+                        <img src="<%=listing.images[0].url%>" alt="Left Upper Image">
+                        <img src="<%=listing.images[1].url%>" alt="Left Lower Image">
+                    </div>
+                    
+                    <div class="right">
+                        <img class="top-right-img" src="<%=listing.images[2].url%>" alt="Right Upper Left Image">
+                        <div class="bottom-right">
+                            <img src="<%=listing.images[3].url%>" alt="Right Upper Right Image">
+                            <img src="<%=listing.images[4].url%>" alt="Right Lower Image">
+                        </div>
+                    </div>
+                </div>
+            <%} %>
+            <% }else { %>
+                <style>
+                    .images-container {
+                        width: 100%;
+                        height: 450px;
+                        box-sizing: border-box;
+                        overflow: hidden;
+                        border-radius: 20px;
+                    }
+    
+                    .images-container img {
+                        width: 100%;
+                    }
+                </style>
+                <div class="images-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No Image">
+                </div>
+            <% } %>
+    </div>
+    <div class="mt-3 col-12 d-block d-md-none">
+        <% if (listing.images.length > 0) { %> 
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="<%=listing.images[0].url%>" class="d-block w-100" alt="<%=listing.images[0].filename%>">
+                    </div>
+                    <%for(let i=1; i<listing.images.length;i++){%>
+                        <div class="carousel-item">
+                            <img src="<%=listing.images[i].url%>" class="d-block w-100" alt="<%=listing.images[0].filename%>">
+                        </div>
+                    <%}%>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        <% }else {%>
+            <style>
+                .images-container {
+                    width: 100%;
+                    height: 450px;
+                    box-sizing: border-box;
+                    overflow: hidden;
+                    border-radius: 20px;
+                }
+
+                .images-container img {
+                    width: 100%;
+                }
+            </style>
+            <div class="images-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" alt="No Image">
+            </div>
+        <% }%> 
+    </div>
+
+    <!-- listing details -->
+    <div class="col-12">
+        <p> owner : <%=listing.owner.username%></p>
+        <p> <% if (listing.reviews.length > 0) { %>
+            <% let sum = 0;  for(let review of listing.reviews) { sum += review.rating; }%>
+            <% for(let i=0; i<sum/listing.reviews.length; i++){ %>
+                <i class="fa-solid fa-star" style="color: #f5bd23; font-size: 1.5rem;"></i>
+            <% }} else { %>
+                <i class="fa-solid fa-star" style="color: #353535; font-size: 1.5rem;"></i> No Reviews
+            <%} %>
+        </p>
+        <% if(listing.filters.length > 0){%>
+        <p class="mt-3">Tags : <% for(let filter of listing.filters){ %><span class="badge rounded-pill text-bg-primary mx-1" style="background-color: #ff385c !important;"><%=filter%></span><% } %></p>
+        <%} %>
+        <p style="overflow-x: hidden;" ><%=listing.description%></p>
+        <p><b>&#8377;<span style="text-decoration: line-through;"><%=listing.actualPrice.toLocaleString("en-in")%></span> <%=listing.discountedPrice.toLocaleString("en-in")%></b>/night</p>
+        <p><%=listing.address%></p>
+        <p><%=listing.city%>, <%=listing.country%></p>
+    </div>
+    
+    <!-- buttons -->
+    <div class="col-12">
+         <% if (typeof(user) != "undefined" && listing.owner.id == user.id) {%>
+            <div class="mb-5 d-flex">
+                <a class="btn btn-red me-3" style="display: flex;" href="<%=listing.id%>/edit">Edit</a> 
+                <a class="btn btn-red me-3" style="display: flex;" href="<%=listing.id%>/allbookings">Show Bookings</a> 
+                <form method="POST" action="/listings/<%=listing.id%>?_method=DELETE">
+                    <button class="btn btn-dark me-3">DELETE</button> 
                 </form>
-                <%}%>
-            </div> 
+            </div>
+        <%} else if(typeof(user) != "undefined" && listing.owner.id != user.id) {%>
+            <div class="mb-5" style="display: flex;">
+                <a class="btn btn-red me-3" style="display: flex;" href="<%=listing.id%>/book">Book</a> 
+            </div>
         <% } %>
     </div>
-    <% }%>
-</body>
+   
+    <div class="col-12">
+        <% if (typeof(user) != "undefined") {%>
+            <div class="mb-5" >
+                <hr>
+                <h2>Create a review</h2>
+                <form class="mt-3 row" method="post" action="/listings/<%=listing.id%>/review">
+                    <div class="mb-3 col-12">
+                        <label class="form-label" for="rating">Rating</label>
+                        <fieldset class="starability-basic">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" checked/>
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+                    </div>
+
+                    <div></div>
+                    <div class="mb-3 col-12">
+                        <label for="comment" class="form-label">Share your experience</label>
+                        <textarea class="form-control" id="comment" rows="3" name="review[comment]" placeholder="here.."></textarea>
+                    </div>
+                    <button class="col-4 col-sm-3 col-md-2 col-lg-1 btn btn-red">POST</button> 
+                </form>
+            </div>
+        <% } else {%>
+            <div class="mb-5" >
+                <hr>
+                <h2>Log in to book & post reviews</h2>
+                <form action="/login" method="get">
+                    <button class="col-4 col-sm-3 col-md-2 col-xxl-1 btn btn-red">Log in</button>
+                </form>
+            </div>
+        <% } %> 
+    </div>
+    
+    
+   <!-- ALl Reviews -->
+    <div class="col-12">
+        <% if(listing.reviews.length > 0) { %>
+            <div class = "row">
+                <hr>
+                <h2><u>All Reviews</u></h2>
+                <% for(let review of listing.reviews) { %>
+                    <div class="card mx-2 mx-sm-auto my-2 col-sm-10 offset-sm-1 col-md-4 px-3 py-2">
+                        <div style="display: flex;flex-wrap: wrap ;align-items: baseline;" class="mt-2">
+                            <h4 style="font-size: 1rem;flex-grow:2;"><b>@<%=review.owner.username%></b></h4>
+                            <p style="flex-grow:0;; margin-right: 0.85rem;font-size: 1rem;" class="mt-1"><% for(let i=0; i<review.rating; i++) { %>
+                                <i class="fa-solid fa-star" style="color: #f5bd23; font-size: 1rem;"></i>
+                            <% } %></p>
+                        </div>
+                        <p style="flex-grow:0;; margin-right: 0.85rem;font-size: 0.8rem;"><%= review.comment %></p>
+                        <% if (typeof(user) != "undefined" && review.owner.id == user.id) {%>
+                        <form method="post" action="/listings/<%=listing.id%>/review/<%=review.id%>?_method=DELETE">
+                            <button class="btn btn-dark">delete</button>
+                        </form>
+                        <%}%>
+                    </div> 
+                <% } %>
+            </div>
+        <% }%>
+    </div>
+</div>
+<script src="/js/save.js"></script>

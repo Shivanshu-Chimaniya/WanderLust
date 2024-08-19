@@ -1,0 +1,176 @@
+<% layout('/layouts/profileLayout')-%>
+
+<div class="mt-5 col-12 px-0 px-sm-3 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2">
+  <div class="profile-container">
+    <h3 class="text-center pt-2 "><%= user.firstName %> <%= user.lastName %></h3>
+    <div class="d-md-flex d-block pb-md-3 mb-3 justify-content-between">
+      <p class="py-0 my-0"> <span class="fw-medium">Username:</span> <%= user.username %></p>
+      <p class="py-0 my-0"> <span class="fw-medium">Email:</span> <%= user.email %></p>
+      <p class="py-0 my-0"> <span class="fw-medium">Contact:</span> <%= user.contact %></p>
+    </div>
+
+    <div class="accordion pb-5" id="accordionPanelsStayOpenExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+            Owned Properties
+          </button>
+        </h2>
+        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+          <div class="accordion-body d-flex flex-wrap justify-content-evenly">
+            <% if(user.postedListings.length > 0){%>
+              <% for(let listing of user.postedListings) { %>
+                  <a href = "listings/<%=listing.id%>" class="card" style="overflow: hidden;width: clamp(150px, 10vw, 200px);">
+                    <% if(listing.images.length > 0) { %> 
+                      <img src="<%=listing.images[0].url%>" class="card-img-top" alt="<%=listing.images[0].filename%>">
+                    <% } else {%>      
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" class="card-img-top" alt="No Image">
+                    <% }%>
+                      <div class="card-body">
+                          <p style="font-size: 0.8rem;" class="card-text"><%=listing.title%><br>
+                          <i>&#8377;<span style="text-decoration: line-through;"><%=listing.actualPrice.toLocaleString("en-in")%></span>
+                                          <%=listing.discountedPrice.toLocaleString("en-in")%></i>/night</p>
+                      </div>
+                      <div class="card-img-overlay"></div>  
+                  </a> 
+              <% } %>
+            <% } else { %> 
+              <div class="m-5 pb-3">
+                  <span class="">You haven't posted any rentals, yet! <a href="/listings/add" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Do it now.</a></span>
+              </div>
+            <% } %> 
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+            Saves 
+          </button>
+        </h2>
+        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show">
+          <div class="accordion-body d-flex flex-wrap justify-content-evenly">
+            <% if(user.savedListings.length > 0){%>
+              <% for(let listing of user.savedListings) { %>
+                  <a href = "listings/<%=listing.id%>" class="card" style="overflow: hidden;width: clamp(150px, 10vw, 200px);">
+                    <% if(listing.images.length > 0) { %> 
+                      <img src="<%=listing.images[0].url%>" class="card-img-top" alt="<%=listing.images[0].filename%>">
+                    <% } else {%>      
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg" class="card-img-top" alt="No Image">
+                    <% }%>
+                      <div class="card-body">
+                          <p style="font-size: 0.8rem;" class="card-text"><%=listing.title%><br>
+                          <i>&#8377;<span style="text-decoration: line-through;"><%=listing.actualPrice.toLocaleString("en-in")%></span>
+                                          <%=listing.discountedPrice.toLocaleString("en-in")%></i>/night</p>
+                      </div>
+                      <div class="card-img-overlay"></div>  
+                  </a> 
+              <% } %>
+            <% } else { %> 
+              <div class="m-5 pb-3">
+                  <span class="">You haven't saved any Rentals, <a href="/listings" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Explore!</a></span>
+              </div>
+            <% } %> 
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">
+            Reviews
+          </button>
+        </h2>
+        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show">
+          <div class="accordion-body d-flex flex-wrap justify-content-evenly">
+            <% if(user.postedReviews.length > 0){%>
+              <% for(let review of user.postedReviews) { %>
+                <div class="border border-secondary-subtle rounded-2 mx-2 mx-sm-auto my-2 col-sm-11  col-md-5 px-3 pt-1 pb-3">
+                    <div style="display: flex;flex-wrap: wrap ;align-items: baseline;" class="mt-2">
+                        <!-- <h4 style="font-size: 1rem;flex-grow:2;"><b>@<%=user.username%></b></h4> -->
+                        <p style="flex-grow:1; margin-right: 0.85rem;font-size: 1rem;" class="mt-1"><% for(let i=0; i<review.rating; i++) { %>
+                            <i class="fa-solid fa-star" style="color: #f5bd23; font-size: 1rem;"></i>
+                        <% } %></p>
+                        <a style="font-size: 0.7rem;" class="btn btn-light" href="/listings/<%=review.listing%>">See</i></a>
+
+                        
+                    </div>
+                    <p style="flex-grow:0;; margin-right: 0.85rem;font-size: 0.8rem;"><%= review.comment %></p>
+                </div> 
+              <% } %>
+            <% } else { %> 
+              <div class="m-5 pb-3">
+                  <span class="">Seems you haven't posted any reviews! Maybe you should be more expressive.<p><a href="/listings" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Wanna Be Expressive?</a></span>
+              </div>
+            <% } %> 
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour">
+            Bookings 
+          </button>
+        </h2>
+        <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" style="max-width: 99vw;overflow-x: auto;">
+          <div class="accordion-body px-0 px-sm-auto" >
+
+            <% if(user.bookings.length > 0){%>
+              <table class="table px-0 px-sm-3 text-center align-baseline">
+                <thead>
+                  <tr>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Days</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Rental</th>
+                  </tr>
+                </thead>
+                <tbody>
+              <% for(let booking of user.bookings) { %>
+                  <tr>
+                    <td><%=booking.fromDate.getDate()+"/"+(booking.fromDate.getMonth() + 1)+"/"+booking.fromDate.getFullYear()%></td>
+                    <td><%=booking.toDate.getDate()+"/"+(booking.toDate.getMonth() + 1)+"/"+booking.toDate.getFullYear()%></td>
+                    <td><%=booking.totalDays%></td>
+                    <td>&#8377;<%= booking.totalAmount.toLocaleString("en-in")%></td>
+                    <td><a class="btn btn-light" href="/listings/<%=booking.listing%>"><i class="fa-solid fa-arrow-right-long"></i> Go</a></td>
+                  </tr>
+              <% } %>
+            </tbody>
+            </table>
+            <% } else { %> 
+              <div class="m-5 pb-3">
+                  <span class="">You haven't booked any rentals yet.<a href="/lisitngs" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Let's us help you to a vacation.</a></span>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2></h2>  
+    
+    
+    <h2></h2>
+    
+    
+  </div>
+</div>
+
+<style>
+
+  .accordion-button{
+    background-color: #ff385dee !important;   
+    color: white !important;
+    font-weight: 500;
+
+  }
+  .accordion-button:not(.collapsed){
+    background-color: #ff385c !important;    
+    /* box-shadow: inset 0 calc(-1* var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color); */
+    color: white !important;
+    font-weight: 700;
+
+  }
+  .accordion-button:focus{
+    box-shadow: 0 0 0 0.25rem #ff385d70 !important;
+  }
+</style>

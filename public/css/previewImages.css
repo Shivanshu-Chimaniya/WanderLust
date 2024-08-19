@@ -1,0 +1,44 @@
+
+#preview-container-container, #original-container-container {
+    display: none;
+    border:#e2e2e2 1px solid; 
+    border-radius: 8px; 
+    min-height: 7.5rem; 
+    padding: 1rem;
+    margin-left: 12px;
+}
+#original-container-container{
+    display: block;
+}
+#preview-container, #original-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.preview-item, .original-item{
+    margin: 1rem;
+    border-radius: 0.25rem;
+    position: relative;
+    max-width: 150px;
+    max-height: 150px;
+    overflow: hidden;
+}
+.preview-item img, .original-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    display: none;
+}
+.preview-item:hover .delete-button {
+    display: block;
+}

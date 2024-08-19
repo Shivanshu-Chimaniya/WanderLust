@@ -1,0 +1,122 @@
+.container-of-containers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.calendar-container {
+    position: relative;
+    background-color: #fff;
+    padding: 0.75rem 1.15rem;
+    border-radius: 0.525rem;
+    box-shadow: 0 0.20rem 0.45rem rgba(0,0,0,0.1);
+    width: min(31.75rem, 95vw);
+    padding-bottom: 3rem;
+}
+
+.year-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+}
+
+.year-selector button {
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.month-selector {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+    font-size: 0.825rem;
+}
+
+.month-selector span {
+    flex-basis: auto 1 1;
+    cursor: pointer;
+    padding: 0.3125rem;
+}
+
+.month-selector span.active {
+    font-weight: bold;
+    color: #ff385c;
+}
+
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.day-names {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: clamp(0.6rem,3.5vw ,1.1rem)
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    width: 100%;
+}
+
+.day {
+    width: calc(100% / 7 - 0.25rem);
+    height: clamp(2rem,3.5vw ,2.5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0.1rem 0.125rem;
+}
+
+.day.highlight {
+    background-color: #ff385c;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+}
+.left-info{
+    background-color: #fff;
+    border-radius: 10px;
+    flex-grow: 1;
+    height: 28rem;
+    display: flex;
+    flex-direction: column;
+    max-width: min(100vw, 31.75rem);
+}
+
+.listing-info, .payment-form{
+    background-color: #fff;
+    padding: 0.75rem 1.15rem;
+    border-radius: 0.525rem;
+    box-shadow: 0 0.20rem 0.45rem rgba(0,0,0,0.1);
+}
+.payment-form{
+    margin-top: 1rem;
+    flex-grow: 1;
+}
+
+#checkAvailabilityBtn{
+    display: block;
+    margin: 1rem auto 0 auto;
+}
+#feedback-text{
+    display: none;
+    color: white;
+    font-size: 0.75rem;
+    margin-bottom: 0 !important;
+}

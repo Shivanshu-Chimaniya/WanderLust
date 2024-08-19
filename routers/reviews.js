@@ -1,6 +1,9 @@
 const express = require("express");
-const {isLoggedIn, isReviewOwner} = require("../middlewares.js");
-const {validateReview} = require("../middlewares.js");
+const {
+	isLoggedIn,
+	isReviewOwner,
+	validateReview,
+} = require("../utils/middlewares.js");
 const reviewController = require("../controllers/review.js");
 
 const router = express.Router({mergeParams: true});

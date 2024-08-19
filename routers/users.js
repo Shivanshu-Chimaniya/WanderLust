@@ -1,10 +1,11 @@
 const express = require("express");
 const passport = require("passport");
-const {saveRedirectURL} = require("../middlewares.js");
+const {saveRedirectURL, isLoggedIn} = require("../utils/middlewares.js");
 const userController = require("../controllers/user.js");
 
 const router = express.Router();
 
+router.get("/profile", isLoggedIn, userController.renderProfile);
 router.get("/signup", userController.renderSignupForm);
 
 router.post("/signup", userController.signupUser);

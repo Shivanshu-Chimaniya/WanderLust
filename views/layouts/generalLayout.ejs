@@ -16,12 +16,12 @@
 <body id="actualBody"> 
     <div class="contentHolder fixed-top ">
         <div class="widthControl">
-            <%- include("../includes/navbar.ejs") %>  
+            <%- include("../includes/navbar.ejs") %> 
         </div>
     </div>
     <div class="contentHolder main">
         <div class="widthControl">
-            <div id="boilerplateContainer" <% if(loadFilters == true) { %>style="padding-top: 11rem;" <% }%>>
+            <div id="boilerplateContainer"  style="padding-top: 80px;">
                 <%- include("../includes/flash.ejs") %>
                 <%- body -%>
             </div>
@@ -34,6 +34,5 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/js/app.js"></script>
-    <script src="/js/filterscroll.js"></script>
 </body>
 </html>

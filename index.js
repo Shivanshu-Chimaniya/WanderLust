@@ -12,7 +12,6 @@ const cookieParser = require("cookie-parser");
 const flash = require("connect-flash"); //  for one time popups/alerts
 const passport = require("passport"); // passport - for Authentication
 const LocalStrategy = require("passport-local");
-const filter = require("./utils/filters.js");
 
 const ExpressError = require("./utils/ExpressError.js");
 const User = require("./models/user.js");
@@ -28,12 +27,14 @@ app.set("views", path.join(__dirname, "views"));
 
 // C0NNECTION WITH MONGO DB
 const mongoose = require("mongoose");
-// let database_URL = "mongodb://127.0.0.1:27017/MajorProject";
+// let database_URL = "mongodb://127.0.0.1:27017/Wanderlust";
 let database_URL = process.env.ATLAS_URL;
 async function main() {
 	await mongoose.connect(database_URL);
 }
-main().catch((err) => console.log(err));
+main().catch((err) => {
+	throw new ExpressError(err);
+});
 
 // Middlewares
 app.use(express.static(path.join(__dirname, "public")));
@@ -73,11 +74,10 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use("/", (req, res, next) => {
+app.use("*", (req, res, next) => {
 	res.locals.success = req.flash("success");
 	res.locals.error = req.flash("error");
-	res.locals.user = req.user || "NotAUser";
-	res.locals.loadFilters = false;
+	res.locals.user = req.user;
 	next();
 });
 
@@ -91,13 +91,24 @@ app.use("/", UserRouter);
 app.use("/listings", ListingRouter);
 app.use("/listings/:id/review", ReviewRouter);
 
+app.use("/", (req, res, next) => {
+	res.locals.success = req.flash("success");
+	res.locals.error = req.flash("error");
+	res.locals.user = req.user;
+	next();
+});
+
 app.all("*", (req, res, next) => {
-	throw new ExpressError(404);
+	throw new ExpressError(
+		404,
+		"Error 404! Seems like the page you are looking for, doesn't exist!"
+	);
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-	let {status = 500, message = "iski maa ka"} = err;
+	let {status = 500, message = "Some uncaught Error."} = err;
+	console.log(err);
 	res.status(status).render("listings/error.ejs", {err});
 });
 

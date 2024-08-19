@@ -1,0 +1,144 @@
+<% layout('/layouts/generalLayout') -%>
+<% if(listing) { %>
+    <script>
+        let listingId = "<%=listing.id %>";
+        let isSignedIn = true;
+        let allBookings = "<%= allBookings %>".split(",");
+        if(`<%- JSON.stringify(user) %>` == '') {
+            isSignedIn = false;
+        }
+
+    </script>
+<% }%>
+<link rel="stylesheet" href="/css/book.css">
+<div class="col-12 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2 ">
+    <a class="btn btn-text" href="/listings/<%=listing.id%>"><i class="fa-solid fa-angles-left"></i> Go back</a>
+</div>
+<div style="padding-top: 1rem;" class="mt-1 col-12 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2 container-of-containers">
+    <div class="calendar-container">    
+        <h5 class="pt-1">Check Availability Here</h5>
+        <div class="year-selector">
+            <button onclick="changeYear(-1)">&#8249;</button>
+            <span id="current-year">2017</span>
+            <button onclick="changeYear(1)">&#8250;</button>
+        </div>
+        <div class="month-selector" id="month-selector">
+            <span data-month="0">Jan</span><span data-month="1">Feb</span><span data-month="2">Mar</span>
+            <span data-month="3">Apr</span><span data-month="4">May</span><span data-month="5">Jun</span>
+            <span data-month="6">Jul</span><span data-month="7">Aug</span><span data-month="8">Sep</span>
+            <span data-month="9">Oct</span><span data-month="10">Nov</span><span data-month="11">Dec</span>
+        </div>
+        <div class="calendar">
+            <div class="day-names">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+                <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div id="days" class="days">
+                <!-- Days will be dynamically generated here -->
+            </div>
+        </div>
+    <p style=" color:#ff385c; width: inherit; text-align: end;  margin: 0; padding: 0;padding-right: 2rem; font-size: 0.75rem; position: absolute; bottom: 0;">* Highlighted Days are booked.</p>
+    </div>
+    <div class="left-info">
+        <div class="listing-info">
+            <h3 class="mt-2"><b><%=listing.title%></b></h3>
+            <p> owner : <%=listing.owner.username%></p>
+            <p> <% if (listing.reviews.length > 0) { %> 
+                <%= listing.reviews[0].rating %>
+                <% for(let i=0; i<(listing.reviews.reduce((sum,rating) => sum+rating))/listing.reviews.length; i++){ %>
+                    <i class="fa-solid fa-star" style="color: #f5bd23; font-size: 1.5rem;"></i>
+                <% } %>
+                <%} else { %>
+                    <i class="fa-solid fa-star" style="color: #353535; font-size: 1.5rem;"></i> No Reviews
+                <%} %>
+            </p>
+        </div>
+        <div class="payment-form">
+            <h3>Make a selection </h3>
+
+            <form id="date-form" class="mt-3 needs-validation" novalidate onsubmit="checkAvailability(event)" method="POST" action='/listings/<%=listing.id%>/book'>
+                <div style="display: flex; justify-content: space-evenly; flex-wrap: wrap; margin-top: 1.5rem;">
+                    <div>
+                        <label class="form-label" for="date1">Start Date:</label>
+                        <input class="form-control"  type="date" id="date1" name="date1" required>
+                        <div class="invalid-feedback">
+                            Invalid Date.
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="date2">End Date:</label>
+                        <input class="form-control" type="date" id="date2" name="date2" required>
+                        <div class="invalid-feedback">
+                            Invalid Date.
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-red" id="checkAvailabilityBtn">
+                    Check Availability<p id="feedback-text">&nbsp;</p></button>
+            </form> 
+        </div>  
+    </div>
+</div>
+<div class=" modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div style="background-color: #ff385c; color: #fff; font-weight: 900;" class="modal-header">
+                <h4 class="modal-title" id="staticBackdropLabel">Confirm Booking</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h5 id="modal-listing-name" class="text-center"></h5>
+                </div>
+                <hr>
+                <div>
+                    <h6 class="fw-bold">Booking Details -</h6>
+                    <p class="p-0 m-0 fs-6">Check in: <span id="modal-from-date"></span></p>
+                    <p class="p-0 m-0 fs-6">Check out: <span id="modal-to-date"></span></p>
+                    <p class="p-0 m-0 fs-6">Total Days: <span class="modal-total-days1"></span> </p>
+                </div>
+                <hr>
+                <div>
+                    <table style="width: 100%;" class="table-info table-success">
+                        <thead>
+                            <tr>
+                              <th scope="col">Description</th>
+                              <th scope="col" class="text-center">Details</th>
+                              <th scope="col" class="text-end">Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td scope="row">Hotel Charges</td>
+                              <td class="text-center">&#8377;<span id="modal-actual-price"></span>x<span class="modal-total-days2"></span></td>
+                              <td class="text-end">&#8377;<span id="modal-total-price"></span> </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">Platform Fee</td>
+                              <td class="text-center">-</td>
+                              <td class="text-end">&#8377;0.00</td>
+                            </tr>
+                            </tr>
+                            <tr>
+                              <td scope="row">Discount</td>
+                              <td class="text-center"><span id="modal-discount-percent"></span>%</td>
+                              <td class="text-end">&#8377;<span id="modal-total-discount"></span></td>
+                            </tr>
+                            <tr  style="color:#ff385c;"  class="table-active fw-bold">
+                                <td scope="row" colspan="2">Grand Total</td>
+                                <td class="text-end">&#8377;<span id="modal-grand-total"></span></td></tr>
+                          </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="myModal.toggle();">Cancel</button>
+                <button type="button" class="btn btn-red " onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/payment.js"></script>
+<script src="/js/loadCalendar.js"></script>
+<script>
+</script>

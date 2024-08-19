@@ -1,0 +1,40 @@
+<% layout('/layouts/generalLayout')-%>
+<div  class="mt-1 col-12 px-3 col-sm-10 offset-sm-1 col-lg-8 offset-lg-2"  style="max-width: 100vw;overflow-x: scroll;">
+    <div style="display: flex; justify-content: space-between;">
+        <h3>All Bookings</h3>
+        <div>
+            <a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>"><i class="fa-solid fa-angles-left"></i> Go back</a>
+        </div>
+    </div>
+    <div class="px-0 px-sm-auto">
+        <% if(allBookings.length > 0){%>
+          <table class="table px-0 px-sm-3 text-center align-baseline">
+            <thead>
+              <tr>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Days</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Booked By</th>
+              </tr>
+            </thead>
+            <tbody>
+          <% for(let booking of allBookings) { %>
+              <tr>
+                <td><%=booking.fromDate.getDate()+"/"+(booking.fromDate.getMonth() + 1)+"/"+booking.fromDate.getFullYear()%></td>
+                <td><%=booking.toDate.getDate()+"/"+(booking.toDate.getMonth() + 1)+"/"+booking.toDate.getFullYear()%></td>
+                <td><%=booking.totalDays%></td>
+                <td>&#8377;<%= booking.totalAmount.toLocaleString("en-in")%></td>
+                <td><%= booking.owner.username %></td>
+              </tr>
+          <% } %>
+            </tbody>
+        </table>
+        <% } else { %> 
+          <div class="m-5 pb-3">
+              <span class="">No reservations have been made yet.<a href="/listings/<%= listing.id %> class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Go back.</a></span>
+          </div>
+        <% } %>
+      </div>
+    
+</div>

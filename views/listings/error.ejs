@@ -1,9 +1,19 @@
-<% layout('/layouts/boilerplate') -%>
-<body>
-    <div class="row mt-5">
-        <div class="col-12 col-md-8 offset-md-2 alert alert-warning" role="alert">
-            <%= err.message %>    
-            <%= err.stack %>    
+<% layout('/layouts/generalLayout') -%>
+<div class="mt-5">
+    <div>
+        <div class="row">
+            <div class="col"></div>
+            <img class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3" src="/assets/errorpage.png" alt="IMAGE IS ALSO NOT FOUND">
+            <div class="col"></div>
+        </div>
+        <p class="text-center"><%= err.message %></p>
+        <div style="display: flex; flex-wrap: nowrap; justify-content: center;">
+            <a class="btn btn-dark" style="align-self:center ;" href="/listings"><i class="fa-solid fa-house-chimney"></i> Home</a>
         </div>
     </div>
-</body>
+    <style>
+        img{
+            filter: drop-shadow(0px, 0px, 50px, #79dfdd);
+        }
+    </style>
+</div>

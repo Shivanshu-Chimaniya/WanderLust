@@ -1,0 +1,75 @@
+<% layout('/layouts/profileLayout')-%>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" ></script>
+<link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+<div class="mx-2 mx-sm-auto  col-sm-10 offset-sm-1 col-md-8 offset-md-2">
+    <div>
+        <div style="display: flex; flex-wrap: nowrap; justify-content: space-between;">
+            <h3><b><%=listing.title%></b></h3>
+            <div>
+                <a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>"><i class="fa-solid fa-angles-left"></i> Go back</a>
+            </div>
+        </div>
+        <style>
+            #actualBody{
+                min-height: fit-content;
+            }
+            #map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                width:100%;
+                height: 100%;
+            }
+        </style>
+        <div style="width: 100%; height:70vh;" id="mapContainer"></div>
+        <script>
+            // Initialize the platform object
+            var platform = new H.service.Platform({
+                'apikey': 'qw9stnQzLH73ovsXD6wFKVoADxeaEo17QPWK2DG_9Q4'
+             });
+            // Obtain the default map types from the platform object:
+            var defaultLayers = platform.createDefaultLayers();
+            // Instantiate (and display) a map object:
+            var map = new H.Map(
+                document.getElementById('mapContainer'),
+                defaultLayers.vector.normal.map,
+                {
+                zoom: 12,
+                center: { lat: "<%=coords.latitude%>", lng: "<%=coords.longitude%>"}
+            });
+            
+            var icon = new H.map.Icon('/assets/pin2.png');
+    
+            // Create a marker using the previously instantiated icon:
+            var marker = new H.map.Marker({ lat:"<%=coords.latitude%>", lng: "<%=coords.longitude%>"}, { icon: icon });
+    
+            // Add the marker to the map:
+            map.addObject(marker);
+    
+            // MapEvents enables the event system.
+            // The behavior variable implements default interactions for pan/zoom (also on mobile touch environments).
+            const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    
+            // Enable dynamic resizing of the map, based on the current size of the enclosing cntainer
+            window.addEventListener('resize', () => map.getViewPort().resize());
+            // Create the default UI:
+            const ui = H.ui.UI.createDefault(map, defaultLayers);
+    
+            // Create a map layer for the overview control
+            const overviewLayers = platform.createDefaultLayers();
+            // Instatiate the overview map by using the H.ui.Overview constructor
+            const overviewMap = new H.ui.Overview(overviewLayers.raster.satellite.map, {
+                //Set the control position and the map size and zoom parameters with respect to the map's viewport
+                alignment: H.ui.LayoutAlignment.LEFT_BOTTOM,
+                zoomDelta: 6,
+                scaleX: 5,
+                scaleY: 6
+            });
+            // Add the control to the map
+            ui.addControl('overview', overviewMap);
+        </script>
+    </div>
+</div>

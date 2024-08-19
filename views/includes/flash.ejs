@@ -1,12 +1,12 @@
-<% if(success && success.length){ %>
-    <div class="mt-2 alert alert-success alert-dismissible fade show col-12 col-md-6 offset-md-3" role="alert">
-        <%= success %>  
+<% if(typeof(success) != "undefined" && success.length){ %>
+    <div class="alert alert-success alert-dismissible fade show col-sm-10 offset-sm-1 offset-md-3 col-md-6" role="alert">
+        <strong>Success!</strong> <%= success %>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <% } %>
-<% if(error && error.length){ %>
-    <div class="mt-2 alert alert-danger alert-dismissible fade show col-12 col-md-6 offset-md-3" role="alert">
-        <%= error %>  
+<% if(typeof(error) != "undefined" && error.length){ %>
+    <div class="alert alert-danger alert-dismissible fade show col-sm-10 offset-sm-1 offset-md-3 col-md-6" role="alert">
+        <strong>Error!</strong> <%= error %>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <% } %>
