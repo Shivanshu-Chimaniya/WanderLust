@@ -23,13 +23,16 @@ This project is built with a robust stack of technologies that ensure a scalable
 - **MVC Architecture**.
 
 - **Cloud Technologies**:
-  - **MongoDB Atlas**, **Render**, **Cloudinary**
+  - MongoDB Atlas, Render, Cloudinary.
 
 ## Setup and Installation
-- **Clone**: run `git clone https://github.com/Shivanshu-Chimaniya/WanderLust`.
-- **Install Dependecies**: run `npm install`.
-- **Start server**: run `Node index.js`.
-- **Open**: go to `localhost:8080/listings` on any web browser.
+*please use your own MongoAtlas, Cloudinary, HereMaps API keys. or you can change Database url to a local one to avoid using MongoAtlas (Step 4)*
+1. **Clone**: run `git clone https://github.com/Shivanshu-Chimaniya/WanderLust`.
+2. **Change Directory**: run`cd WanderLust`.
+3. **Install Dependecies**: run `npm install`.
+4. **Change DataBase URL to a local one**: comment line 31 and un-comment Line 30 in index.js file.
+5. **Start server**: run `Node index.js` or `Nodemon index.js`.
+6. **Open**: go to `localhost:8080/listings` on any web browser.
 
 ## Acknowledgments
 I want to thank **Shraddha Khapra** for her amazing guidance during this project. Her teachings were crucial in shaping every step I took. I followed her methods closely, which greatly influenced the final result.
