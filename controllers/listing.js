@@ -130,12 +130,9 @@ module.exports.editListing = wrapAsync(async (req, res) => {
 			req.body.listing.city.replace(" ", "+") +
 			"+" +
 			req.body.listing.country.replace(" ", "+");
-		let data = await fetch(
-			`https://geocode.search.hereapi.com/v1/geocode?q=` +
-				searchAddress +
-				`&apiKey=` +
-				`${HEREMAPS_API_KEY}`
-		);
+
+		let URL = `https://geocode.search.hereapi.com/v1/geocode?q=${searchAddress}+&apiKey=${process.env.HEREMAPS_API_KEY}`;
+		let data = await fetch(URL);
 		let result = await data.json();
 		let coords = result.items[0].position;
 		req.body.listing.latitude = coords.lat;
