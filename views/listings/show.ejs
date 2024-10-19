@@ -14,8 +14,8 @@
         <div class="d-none d-lg-flex">
             <a class="btn btn-text" style="align-self:center ;" href="/listings"><i class="fa-solid fa-angles-left"></i> Go back</a>
             <a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>/map"><i class="fa-solid fa-map-location-dot"></i> Map</a>
-            <button id="saveButton" onClick="saveListing()" class="nav-link  btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
-            <button style="display: none;" id="unsaveButton" onClick=" unsaveListing()" class="nav-link btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
+            <button onClick="saveListing()" class="saveButton nav-link btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
+            <button style="display: none;" onClick=" unsaveListing()" class="unsaveButton nav-link btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
             <button class="btn btn-text"><i class="fa-regular fa-share-from-square"></i> Share</button> 
         </div>
         <div class="d-block d-lg-none dropdown-center mt-2 me-4">
@@ -26,11 +26,11 @@
             
             <li><a class="dropdown-item btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>/map"><i class="fa-solid fa-map-location-dot"></i> Map</a></li>
             <li>
-                <button id="saveButton" onClick="saveListing()" class="dropdown-item btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
-                <button style="display: none;" id="unsaveButton" onClick=" unsaveListing()" class="dropdown-item btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
+                <button onClick="saveListing()" class="saveButton dropdown-item btn btn-text"><i class="fa-regular fa-floppy-disk"></i> Save</button> 
+                <button style="display: none;" onClick="unsaveListing()" class="unsaveButton dropdown-item btn btn-text"><i class="fa-solid fa-check"></i> Saved</button> 
             </li>
             <li><button class="dropdown-item btn btn-text"><i class="fa-regular fa-share-from-square"></i> Share</button></li>
-            <li><a class="btn btn-text" style="align-self:center ;" href="/listings/<%=listing.id%>"><i class="fa-solid fa-angles-left"></i> Go back</a></li>
+            <li><a class="btn btn-text" style="align-self:center ;" href="/listings"><i class="fa-solid fa-angles-left"></i> Go back</a></li>
             </ul>
           </div>
     </div>

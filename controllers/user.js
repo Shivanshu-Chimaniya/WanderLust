@@ -20,7 +20,6 @@ module.exports.renderProfile = wrapAsync(async (req, res) => {
 			model: "Booking",
 		},
 	]);
-	console.log(currUser);
 	res.render("users/profile.ejs", {user: currUser});
 });
 module.exports.renderSignupForm = (req, res) => {

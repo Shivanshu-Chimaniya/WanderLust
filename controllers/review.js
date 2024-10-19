@@ -11,7 +11,6 @@ module.exports.invalidFix = (req, res) => {
 module.exports.saveReview = wrapAsync(async (req, res) => {
 	let id = req.params.id;
 	let listing = await Listing.findById(id);
-	console.log("hii");
 	let owner = await User.findByUsername(req.user.username);
 	if (!listing) {
 		req.flash("error", "Listing Not In Database!");

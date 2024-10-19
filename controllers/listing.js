@@ -2,6 +2,7 @@ const {Listing, Review, User, Booking} = require("../models/index.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const filters = require("../utils/filters.js");
 const {cloudinary} = require("../utils/cloudConfig.js");
+const ExpressError = require("../utils/ExpressError.js");
 
 module.exports.index = wrapAsync(async (req, res) => {
 	let allListings = await Listing.find({});
@@ -47,18 +48,17 @@ module.exports.saveNewListing = wrapAsync(async (req, res) => {
 		"+" +
 		newListing.country.replace(" ", "+");
 	try {
-		let data = await fetch(
-			`https://geocode.search.hereapi.com/v1/geocode?q=` +
-				searchAddress +
-				`&apiKey=` +
-				`${HEREMAPS_API_KEY}`
-		);
+		let URL = `https://geocode.search.hereapi.com/v1/geocode?q=${searchAddress}+&apiKey=${process.env.HEREMAPS_API_KEY}`;
+		let data = await fetch(URL);
 		let result = await data.json();
 		let coords = result.items[0].position;
 		newListing.latitude = coords.lat;
 		newListing.longitude = coords.lng;
 	} catch (err) {
-		throw new ExpressError("Couldn't save! something wrong with map API.");
+		throw new ExpressError(
+			200,
+			"Couldn't save! something wrong with map API."
+		);
 	}
 	let user = await User.findOne({"username": req.user.username});
 	newListing.owner = req.user;
@@ -108,7 +108,10 @@ module.exports.editListing = wrapAsync(async (req, res) => {
 		for (let image of original.images) {
 			await cloudinary.uploader.destroy(image.publicId, (err, res) => {
 				if (err) {
-					console.log(err);
+					throw new ExpressError(
+						404,
+						"Error in deleting listing images!"
+					);
 				}
 			});
 		}
@@ -165,7 +168,11 @@ module.exports.destroyListing = wrapAsync(async (req, res) => {
 		for (let image of deletedVal.images) {
 			await cloudinary.uploader.destroy(image.publicId, (err, res) => {
 				if (err) {
-					console.log(err);
+					console.err(err.message);
+					throw new ExpressError(
+						100,
+						"Error in deleting listing images!"
+					);
 				}
 			});
 		}
@@ -251,10 +258,6 @@ module.exports.confirmBooking = wrapAsync(async (req, res) => {
 	to.setHours(5, 30, 0, 0);
 	to.setFullYear(y2, m2 - 1, d2);
 
-	console.log("confirmong - ");
-	console.log(from);
-	console.log(to);
-
 	let listing = await Listing.findById(id);
 	let owner = await User.findByUsername(req.user.username);
 
@@ -294,7 +297,6 @@ module.exports.checkDates = wrapAsync(async (req, res) => {
 		let end = currBooking.toDate;
 		const overlap = from <= end && start <= to;
 		if (overlap) {
-			console.log("fail");
 			let response = {success: false};
 			res.send(JSON.stringify(response));
 		}
@@ -329,8 +331,6 @@ module.exports.showAllBookings = wrapAsync(async (req, res) => {
 		allBookings.push(currInfo);
 	}
 	let b = allBookings.sort((a, b) => a.fromDate - b.fromDate);
-	console.log(allBookings);
-	console.log(b);
 	res.render("listings/bookings.ejs", {
 		listing: {
 			id: listing.id,

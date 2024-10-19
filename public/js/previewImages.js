@@ -2,7 +2,6 @@ let con = document.getElementById("preview-container-container");
 document
 	.getElementById("image-input")
 	.addEventListener("change", function (event) {
-		console.log("hii, i am connected");
 		const fileInput = event.target;
 		const previewContainer = document.getElementById("preview-container");
 		previewContainer.innerHTML = "";

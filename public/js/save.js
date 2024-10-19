@@ -1,29 +1,36 @@
-const saveButton = document.getElementById("saveButton");
-const unsaveButton = document.getElementById("unsaveButton");
 const URL = `/listings/${listingId}/`;
 if (isSignedIn) {
 	document.addEventListener("DOMContentLoaded", async (event) => {
 		let result = await fetch(URL + "issaved");
 		let response = await result.json();
-		// console.log(response.isSaved);
 		if (response.isSaved) {
+			let saveButton = document.getElementsByClassName("saveButton");
+			let unsaveButton = document.getElementsByClassName("unsaveButton");
 			hide(saveButton);
 			show(unsaveButton);
 		}
 	});
 }
 
-function hide(element) {
-	element.style.display = "none";
+function hide(elements) {
+	for (let element of elements) {
+		element.style.display = "none";
+	}
 }
-function show(element) {
-	element.style.display = "inline";
+function show(elements) {
+	for (let element of elements) {
+		element.style.display = "inline";
+	}
 }
-function disable(element) {
-	element.disabled = true;
+function disable(elements) {
+	for (let element of elements) {
+		element.disabled = true;
+	}
 }
-function enable(element) {
-	element.disabled = false;
+function enable(elements) {
+	for (let element of elements) {
+		element.disabled = false;
+	}
 }
 function flashSignIn() {
 	alert("sign in");
@@ -31,11 +38,14 @@ function flashSignIn() {
 function flash(msg) {
 	alert(msg);
 }
+
 async function saveListing() {
 	if (!isSignedIn) {
 		flashSignIn();
 		return;
 	}
+	let saveButton = document.getElementsByClassName("saveButton");
+	let unsaveButton = document.getElementsByClassName("unsaveButton");
 	hide(saveButton);
 	show(unsaveButton);
 	disable(unsaveButton);
@@ -50,11 +60,14 @@ async function saveListing() {
 		show(saveButton);
 	}
 }
+
 async function unsaveListing() {
 	if (!isSignedIn) {
 		flashSignIn();
 		return;
 	}
+	let saveButton = document.getElementsByClassName("saveButton");
+	let unsaveButton = document.getElementsByClassName("unsaveButton");
 	hide(unsaveButton);
 	show(saveButton);
 	disable(saveButton);

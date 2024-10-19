@@ -2,7 +2,6 @@
     box-sizing: border-box;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    color-scheme: light dark;
 }
 img{
     object-fit: cover !important;
@@ -211,6 +210,12 @@ footer a:hover{
     color: white !important;
 }
 
+
+.text-bg-red{
+    
+    background-color: #fb365a !important;
+    color: white !important;
+}
 
 /* flash */
 @keyframes flashTime {

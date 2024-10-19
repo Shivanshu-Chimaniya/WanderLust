@@ -1,5 +1,4 @@
 function makeModal(modal) {
-	console.log("hi");
 	const myModal = new bootstrap.Modal(modal, {});
 	myModal.toggle();
 }

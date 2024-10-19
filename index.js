@@ -91,14 +91,8 @@ app.use("/", UserRouter);
 app.use("/listings", ListingRouter);
 app.use("/listings/:id/review", ReviewRouter);
 
-app.use("/", (req, res, next) => {
-	res.locals.success = req.flash("success");
-	res.locals.error = req.flash("error");
-	res.locals.user = req.user;
-	next();
-});
-
 app.all("*", (req, res, next) => {
+	console.log(req.originalUrl);
 	throw new ExpressError(
 		404,
 		"Error 404! Seems like the page you are looking for, doesn't exist!"
@@ -108,11 +102,11 @@ app.all("*", (req, res, next) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
 	let {status = 500, message = "Some uncaught Error."} = err;
-	console.log(err);
+	console.log(err.message);
 	res.status(status).render("listings/error.ejs", {err});
 });
 
 // Node server setup and start.
 app.listen(8080, () => {
-	console.log("listening...");
+	console.log(`Server Started: ${new Date(Date.now()).toString()}`);
 });

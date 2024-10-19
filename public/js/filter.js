@@ -1,21 +1,42 @@
 let activeFilters = [];
 let allListingsObject = document.querySelectorAll(".cardsContainer .card");
+let activeFiltersBar = document.querySelector("#active-filters-bar");
+let noResult = document.querySelector(".no-results");
+let input = document.querySelector("#all-listing-searchbar");
+
 let allListings = [];
 for (let listing of allListingsObject) {
 	allListings.push(listing);
 }
-let noResult = document.querySelector(".no-results");
-
-let input = document.querySelector("#all-listing-searchbar");
 
 let handleChange = () => {
-	refine(activeFilters, input.value);
+	refine(activeFilters, input.value.toLowerCase());
 };
-
 let submitForm = (event, el) => {
 	event.preventDefault();
-	refine(activeFilters, input.value);
+	refine(activeFilters, input.value.toLowerCase());
 };
+
+let handleRemoveFilter = (e) => {
+	if (e.target.tagName == "SPAN") {
+		let filterName = e.target.innerHTML;
+		activeFilters.splice(activeFilters.indexOf(filterName), 1);
+
+		let allActives = document.querySelectorAll(
+			`.filters-and-btns .filters .active`
+		);
+		for (let filterEl of allActives) {
+			if (filterEl.innerText == filterName) {
+				filterEl.classList.remove("active");
+				break;
+			}
+		}
+		refine(activeFilters, input.value.toLowerCase());
+	}
+};
+
+input.addEventListener("keyup", handleChange);
+activeFiltersBar.addEventListener("click", (e) => handleRemoveFilter(e));
 
 let refine = (activeFilters, searchPrompt) => {
 	let allListings = [];
@@ -39,6 +60,15 @@ let refine = (activeFilters, searchPrompt) => {
 			temp.push(listing);
 		}
 	}
+	if (activeFilters.length != 0) {
+		let str = "Active Filters :";
+		for (let af of activeFilters) {
+			str += `<span class="badge rounded-pill text-bg-red m-1">${af}</span>`;
+		}
+		activeFiltersBar.innerHTML = str;
+	} else {
+		activeFiltersBar.innerHTML = "";
+	}
 	for (let listing of allListingsObject) {
 		if (temp.includes(listing)) {
 			listing.style.display = "inline";
@@ -52,6 +82,7 @@ let refine = (activeFilters, searchPrompt) => {
 			return;
 		}
 	}
+
 	noResult.style.display = "flex";
 };
 
@@ -65,7 +96,7 @@ let clicked = (filter) => {
 	} else {
 		add(filter);
 	}
-	refine(activeFilters, input.value);
+	refine(activeFilters, input.value.toLowerCase());
 };
 
 function remove(el) {
@@ -80,5 +111,5 @@ function getFilterName(filter) {
 	return filter.lastChild.innerText;
 }
 function getListingName(listing) {
-	return listing.querySelector(".listing-name").innerText;
+	return listing.querySelector(".listing-name").innerText.toLowerCase();
 }
