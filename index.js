@@ -27,7 +27,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // C0NNECTION WITH MONGO DB
 const mongoose = require("mongoose");
-// let database_URL = "mongodb://127.0.0.1:27017/Wanderlust";
+// let database_URL = "mongodb://127.0.0.1:27017/wanderlust";
 let database_URL = process.env.ATLAS_URL;
 async function main() {
 	await mongoose.connect(database_URL);
